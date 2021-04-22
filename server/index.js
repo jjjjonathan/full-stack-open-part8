@@ -27,8 +27,8 @@ let authors = [
 ];
 
 /*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
+ * It might make more sense to associate a book with its author by storing the author’s id instead of the author’s name in the book.
+ * However, for simplicity, we will store the author's name in the book
  */
 
 let books = [
@@ -75,7 +75,7 @@ let books = [
     genres: ['classic', 'crime'],
   },
   {
-    title: 'The Demon ',
+    title: 'The Demon',
     published: 1872,
     author: 'Fyodor Dostoevsky',
     id: 'afa5de04-344d-11e9-a414-719c6709cf3e',
@@ -84,12 +84,31 @@ let books = [
 ];
 
 const typeDefs = gql`
+  type Author {
+    name: String!
+    id: ID!
+    born: Int
+  }
+
+  type Book {
+    title: String!
+    published: Int!
+    author: Author!
+    id: ID!
+    genres: [String!]
+  }
+
   type Query {
+    bookCount: Int!
+    authorCount: Int!
   }
 `;
 
 const resolvers = {
-  Query: {},
+  Query: {
+    bookCount: () => books.length,
+    authorCount: () => authors.length,
+  },
 };
 
 const server = new ApolloServer({
