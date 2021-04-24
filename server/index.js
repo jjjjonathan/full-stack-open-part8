@@ -56,35 +56,22 @@ const typeDefs = gql`
 
 const resolvers = {
   Author: {
-    /* bookCount: (root) => {
-      const booksByAuthor = books.filter((book) => book.author === root.name);
+    bookCount: async (root) => {
+      const booksByAuthor = await Book.find({ author: root.id });
       return booksByAuthor.length;
-    }, */
+    },
   },
   Book: {
-    /* author: (root) => {
-      return authors.find((author) => author.name === root.author);
-    }, */
+    author: async (root) => {
+      const author = await Author.findOne({ _id: root.author });
+      console.log(root.author, author);
+      return { name: author.name, id: author._id };
+    },
   },
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    /* allBooks: (root, args) => {
-      if (!args.author && !args.genre) return books;
-      if (args.author && args.genre) {
-        return books.filter((book) => {
-          return (
-            book.author === args.author && book.genres.includes(args.genre)
-          );
-        });
-      }
-      if (args.author) {
-        return books.filter((book) => book.author === args.author);
-      }
-      if (args.genre) {
-        return books.filter((book) => book.genres.includes(args.genre));
-      }
-    }, */
+    allBooks: () => Book.find({}),
     allAuthors: () => Author.find({}),
   },
   Mutation: {
@@ -99,18 +86,11 @@ const resolvers = {
       const book = new Book({ ...args, author: author._id });
       return book.save();
     },
-    /* editAuthor: (root, args) => {
-      let updatedAuthor;
-      authors = authors.map((author) => {
-        if (author.name !== args.name) {
-          return author;
-        } else {
-          updatedAuthor = { ...author, born: args.setBornTo };
-          return updatedAuthor;
-        }
-      });
-      return updatedAuthor;
-    }, */
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name });
+      author.born = args.setBornTo;
+      return author.save();
+    },
   },
 };
 
