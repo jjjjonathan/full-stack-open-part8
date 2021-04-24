@@ -8,7 +8,7 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client';
-import { ALL_AUTHORS } from './queries';
+import { ALL_AUTHORS, ALL_BOOKS } from './queries';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -18,6 +18,9 @@ const client = new ApolloClient({
 });
 
 client.query({ query: ALL_AUTHORS }).then((response) => {
+  console.log(response.data);
+});
+client.query({ query: ALL_BOOKS }).then((response) => {
   console.log(response.data);
 });
 
