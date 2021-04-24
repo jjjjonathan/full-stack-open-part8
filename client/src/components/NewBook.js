@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries';
 
-const NewBook = (props) => {
+const NewBook = ({ setPage, show }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [published, setPublished] = useState('');
@@ -13,7 +13,7 @@ const NewBook = (props) => {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
   });
 
-  if (!props.show) {
+  if (!show) {
     return null;
   }
 
@@ -29,6 +29,7 @@ const NewBook = (props) => {
     setAuthor('');
     setGenres([]);
     setGenre('');
+    setPage('books');
   };
 
   const addGenre = () => {
@@ -38,6 +39,7 @@ const NewBook = (props) => {
 
   return (
     <div>
+      <h2>add book</h2>
       <form onSubmit={submit}>
         <div>
           title

@@ -11,6 +11,10 @@ const SetBirthYear = ({ authors }) => {
     refetchQueries: [{ query: ALL_AUTHORS }],
   });
 
+  if (!localStorage.getItem('libraryUserToken')) {
+    return null;
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     editAuthor({
