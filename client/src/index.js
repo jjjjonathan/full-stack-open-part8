@@ -10,7 +10,7 @@ import {
 } from '@apollo/client';
 
 import { setContext } from 'apollo-link-context';
-import { ALL_AUTHORS, ALL_BOOKS } from './queries';
+import { ALL_AUTHORS, ALL_BOOKS, ME } from './queries';
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('libraryUserToken');
@@ -33,6 +33,9 @@ client.query({ query: ALL_AUTHORS }).then((response) => {
   console.log(response.data);
 });
 client.query({ query: ALL_BOOKS }).then((response) => {
+  console.log(response.data);
+});
+client.query({ query: ME }).then((response) => {
   console.log(response.data);
 });
 
