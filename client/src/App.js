@@ -1,16 +1,27 @@
-import { useApolloClient } from '@apollo/client';
+import { useSubscription, useApolloClient } from '@apollo/client';
 import React, { useState } from 'react';
 import Authors from './components/Authors';
 import Books from './components/Books';
 import Login from './components/Login';
 import NewBook from './components/NewBook';
 import Recommendations from './components/Recommendations';
+import { BOOK_ADDED } from './queries';
 
 const App = () => {
   const [page, setPage] = useState('authors');
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(null); // eslint-disable-line no-unused-vars
 
   const client = useApolloClient();
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const newBook = subscriptionData.data.bookAdded;
+      console.log(newBook);
+      window.alert(
+        `${newBook.title} by ${newBook.author.name} added just now!`
+      );
+    },
+  });
 
   const handleLogout = () => {
     setToken(null);
